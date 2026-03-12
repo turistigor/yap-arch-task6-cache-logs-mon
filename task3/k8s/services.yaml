@@ -1,65 +1,81 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-a
+  name: shop-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: service-a
+      app: shop-api
   template:
     metadata:
       labels:
-        app: service-a
+        app: shop-api
     spec:
       containers:
-        - name: service-a
-          image: service-a:latest
+        - name: shop-api
+          image: shop-api:latest
           imagePullPolicy: IfNotPresent
+          env:
+            - name: "MES_API_URL"
+              value: "http://mes-api:8001"
+            - name: "SHOP_API_HOST"
+              value: "0.0.0.0"
+            - name: SHOP_API_PORT
+              value: "8000"
+            - name: OTLP_COLLECTOR_URL
+              value: "simplest-collector:4317"
           ports:
-            - containerPort: 8080
+            - containerPort: 8000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-a
+  name: shop-api
 spec:
   selector:
-    app: service-a
+    app: shop-api
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
+      port: 8000
+      targetPort: 8000
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-b
+  name: mes-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: service-b
+      app: mes-api
   template:
     metadata:
       labels:
-        app: service-b
+        app: mes-api
     spec:
       containers:
-        - name: service-b
-          image: service-b:latest
+        - name: mes-api
+          image: mes-api:latest
           imagePullPolicy: IfNotPresent
+          env:
+            - name: "MES_API_HOST"
+              value: "0.0.0.0"
+            - name: MES_API_PORT
+              value: "8001"
+            - name: OTLP_COLLECTOR_URL
+              value: "simplest-collector:4317"
           ports:
-            - containerPort: 8080
+            - containerPort: 8001
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-b
+  name: mes-api
 spec:
   selector:
-    app: service-b
+    app: mes-api
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
+      port: 8001
+      targetPort: 8001

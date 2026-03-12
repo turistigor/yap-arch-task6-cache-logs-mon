@@ -1,0 +1,76 @@
+{
+	"info": {
+		"_postman_id": "11ef5c20-dd76-45ee-842c-8bf515e38415",
+		"name": "Observability",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5873967"
+	},
+	"item": [
+		{
+			"name": "Create order",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": 923,\n    \"descr\": \"This is complex design of ther order\",\n    \"content\": \"This is a 3D-model\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/order",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calc price",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"order_id\": \"f353ca91-4fc5-49f2-9b9e-304f83d11914\",\n    \"content\": \"asdfgkl;wermgbk;er\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8001/price",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"price"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
