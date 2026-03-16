@@ -14,6 +14,7 @@
 
 ### 1. Запуск Minikube 
 ```bash
+cd <project_root>/task3
 minikube start --addons=ingress 
 ```
 Ingress нужен для вызовов
@@ -80,7 +81,7 @@ kubectl port-forward svc/mes-api 8001:8001 -n observability &
 ```
 
 ### Тестирование сервисов
-Через Postman и [коллекцию](./services/Observability.postman_collection.json).
+Через [браузер](http://localhost:16686) и Postman [коллекцию](./services/Observability.postman_collection.json).
 
 ## Структура проекта
 - `services/shop-api/` - Исходный код shop-api
