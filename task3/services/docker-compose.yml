@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686" # UI (открыть в браузере)
+      - "4317:4317"   # OTLP gRPC (для приема трейсов)
+      - "4318:4318"   # OTLP HTTP (альтернатива)
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    networks:
+      - alexandrit_net
+
+  shop-api:
+    image: shop-api:latest
+    build:
+      context: ./shop-api
+      dockerfile: Dockerfile
+    container_name: shop-api
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8000/healthcheck"]
+      interval: 10s
+      timeout: 2s
+      retries: 3
+      start_period: 3s
+    restart: unless-stopped
+    environment:
+      - MES_API_URL=http://mes-api:8001
+    networks:
+      - alexandrit_net
+    depends_on:
+      - jaeger
+      - mes-api
+
+  mes-api:
+    image: mes-api:latest
+    build:
+      context: ./mes-api
+      dockerfile: Dockerfile
+    container_name: mes-api
+    ports:
+      - "8001:8001"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8001/healthcheck"]
+      interval: 10s
+      timeout: 2s
+      retries: 3
+      start_period: 3s
+    restart: unless-stopped
+    networks:
+      - alexandrit_net
+    depends_on:
+      - jaeger
+
+networks:
+  alexandrit_net:
+    driver: bridge

@@ -1,0 +1,24 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "shop_api",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "shop_api",
+            "cwd": "${workspaceFolder}/task3/services/shop-api",
+            "python": "${workspaceFolder}/task3/services/shop-api/.venv/bin/python3.12"
+        },
+        {
+            "name": "mes_api",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mes_api",
+            "cwd": "${workspaceFolder}/task3/services/mes-api",
+            "python": "${workspaceFolder}/task3/services/mes-api/.venv/bin/python3.12"
+        }
+    ]
+}

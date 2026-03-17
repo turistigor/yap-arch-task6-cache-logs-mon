@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shop-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shop-api
+  template:
+    metadata:
+      labels:
+        app: shop-api
+    spec:
+      containers:
+        - name: shop-api
+          image: shop-api:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "MES_API_URL"
+              value: "http://mes-api:8001"
+            - name: "SHOP_API_HOST"
+              value: "0.0.0.0"
+            - name: SHOP_API_PORT
+              value: "8000"
+            - name: OTLP_COLLECTOR_URL
+              value: "simplest-collector:4317"
+          ports:
+            - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shop-api
+spec:
+  selector:
+    app: shop-api
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mes-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mes-api
+  template:
+    metadata:
+      labels:
+        app: mes-api
+    spec:
+      containers:
+        - name: mes-api
+          image: mes-api:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "MES_API_HOST"
+              value: "0.0.0.0"
+            - name: MES_API_PORT
+              value: "8001"
+            - name: OTLP_COLLECTOR_URL
+              value: "simplest-collector:4317"
+          ports:
+            - containerPort: 8001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mes-api
+spec:
+  selector:
+    app: mes-api
+  ports:
+    - protocol: TCP
+      port: 8001
+      targetPort: 8001
